@@ -1,0 +1,19 @@
+apiVersion: autoscaling.x-k8s.io/v1alpha1
+kind: StartupCPUBoost
+metadata:
+  name: demo-app
+selector:
+  matchExpressions:
+  - key: demo.kcdzurich.ch/experiment
+    operator: In
+    values: ["startup-cpu-boost"]
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: spring-app
+      percentageIncrease:
+        value: 100
+  durationPolicy:
+    podCondition:
+      type: Ready
+      status: "True"

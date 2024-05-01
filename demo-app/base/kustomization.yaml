@@ -1,0 +1,6 @@
+resources:
+  - spring-demo-app.yaml
+configMapGenerator:
+- name: spring-demo-app-config
+  files:
+  - application.yaml

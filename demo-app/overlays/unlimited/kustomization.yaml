@@ -1,0 +1,21 @@
+resources:
+- ../../base
+nameSuffix: -unlimited
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: spring-demo-app
+      spec:
+        template:
+          metadata:
+            labels:
+              demo.kcdzurich.ch/experiment: unlimited
+          spec:
+            containers:
+            - name: spring-app
+              resources:
+                limits: 
+                  cpu: null
+          

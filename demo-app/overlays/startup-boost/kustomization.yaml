@@ -1,0 +1,14 @@
+resources:
+- ../../base
+nameSuffix: -startup-cpu-boost
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: spring-demo-app
+      spec:
+        template:
+          metadata:
+            labels:
+              demo.kcdzurich.ch/experiment: startup-cpu-boost

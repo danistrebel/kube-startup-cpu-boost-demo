@@ -1,0 +1,23 @@
+resources:
+- ../../base
+nameSuffix: -overprovisioned
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: spring-demo-app
+      spec:
+        template:
+          metadata:
+            labels:
+              demo.kcdzurich.ch/experiment: overprovisioned
+          spec:
+            containers:
+            - name: spring-app
+              resources:
+                limits: 
+                  cpu: 2000m
+                requests:
+                  cpu: 1000m
+          
