@@ -116,7 +116,7 @@ Ideally in 4 separate terminal windows next to one another run each of the follo
 Apply the CPU Boost CR
 
 ```sh
-kubectl apply -f boost-double.yaml -n experiment
+kubectl apply -f demo-app/boost-double.yaml -n experiment
 ```
 
 Then apply the four experiment scenarios via kustomization:
