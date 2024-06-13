@@ -4,6 +4,8 @@ This is repository contains a demo script to showcase the [Kube Startup CPU Boos
 
 ## Demo on GKE
 
+The following snippet creates a GKE cluster to try the Kube Startup CPU Boost controller. Note that as of Kubernetes 1.30 the API for in-place resource resize for pods is still in ALPHA stage. To create enable the API in GKE you have to create an alpha cluster that is not suited for production use and will be automatically deleted after 30 days.  
+
 ```sh
 gcloud services enable container.googleapis.com --project $PROJECT_ID
 gcloud compute networks create demo-network --subnet-mode=auto --project $PROJECT_ID
@@ -22,7 +24,7 @@ gcloud container node-pools create experiment \
   --project $PROJECT_ID
 ```
 
-check if the ALPHA feature gate is enabled:
+Check if the ALPHA feature gate is enabled:
 
 ```sh
 kubectl get --raw /metrics | grep kubernetes_feature_enabled | grep InPlacePodVerticalScaling
@@ -36,6 +38,8 @@ kubernetes_feature_enabled{name="InPlacePodVerticalScaling",stage="ALPHA"} 1
 
 ## Install Kube Startup CPU Boost Resources
 
+Run the following command to install the controller:
+
 ```sh
 kubectl apply -f https://github.com/google/kube-startup-cpu-boost/releases/download/v0.8.1/manifests.yaml
 ```
@@ -48,6 +52,8 @@ kubectl logs deploy/kube-startup-cpu-boost-controller-manager -n kube-startup-cp
 ```
 
 ## Create the experiment namespace
+
+We group our experiments in the experiment namespace:
 
 ```sh
 kubectl create ns experiment
@@ -85,7 +91,7 @@ With this we can show that we can resize the pod's resources on the fly without 
 
 ## Prepare for the grand show
 
-Ideally in 4 separate terminal windows next to one another run each of the following:
+Ideally in 4 separate terminal windows next to one another run each of the following commands:
 
 ### Feature: Startup CPU Boost Controller
 
@@ -113,7 +119,7 @@ Ideally in 4 separate terminal windows next to one another run each of the follo
 
 ## Create the four experiment scenarios
 
-Apply the CPU Boost CR
+Apply the CPU Boost resource:
 
 ```sh
 kubectl apply -f demo-app/boost-double.yaml -n experiment
@@ -128,11 +134,13 @@ kubectl apply -k demo-app/overlays/unlimited -n experiment
 kubectl apply -k demo-app/overlays/overprovisioned -n experiment
 ```
 
-In the previously prepared views you can see how the startup CPU boost controller bumps the CPU requests of the container until it reached the ready state and then restores the resource requests. You can also compare the startup time against the other three scenarios.
+In the previously prepared views you can now observe how the startup CPU boost controller bumps the CPU requests of the container until it reached the ready state and then restores the resource requests. You can also compare the startup time against the other three scenarios.
 
 ![Startup CPU Boost](img/startup-cpu-boost.gif)
 
 ## Clean Up
+
+Use the following script to clean up the experiment:
 
 ### Remove all experiments (e.g. to restart the demo)
 
